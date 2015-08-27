@@ -13,7 +13,7 @@ cat <<EOF >>/tmp/appeng-inputs.json
       "application_password": "$MYSQL_APPLICATION_PASSWORD",
       "application_user_privileges": "$MYSQL_APPLICATION_USER_PRIVILEGES",
       "application_database_name": "$MYSQL_DATABASE_NAME",
-      "server_repl_password": "$MYSQL_REPL_PASSWORD"
+      "server_repl_password": "$MYSQL_REPL_PASSWORD",
       "device": {
         "count": "$MYSQL_DEVICE_COUNT",
         "mount_point": "$MYSQL_DEVICE_MPOINT",
