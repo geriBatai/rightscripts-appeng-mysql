@@ -10,7 +10,7 @@ cat <<EOF >>/tmp/appeng-inputs.json
       "bind_network_interface": "$MYSQL_BIND_INTERFACE",
       "server_usage": "$MYSQL_SERVER_USAGE",
       "application_username": "$MYSQL_APPLICATION_USERNAME",
-      "application_password": $MYSQL_APPLICATION_PASSWORD",
+      "application_password": "$MYSQL_APPLICATION_PASSWORD",
       "application_user_privileges": "$MYSQL_APPLICATION_USER_PRIVILEGES",
       "application_database_name": "$MYSQL_DATABASE_NAME",
       "server_repl_password": "$MYSQL_REPL_PASSWORD"
