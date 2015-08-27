@@ -33,7 +33,7 @@ cat <<EOF >>/tmp/appeng-inputs.json
           "monthlies": "$MYSQL_BACKUP_KEEP_MONTHLIES",
           "yearlies": "$MYSQL_BACKUP_KEEP_YEARLIES",
           "keep_last": "$MYSQL_BACKUP_KEEP_LAST"
-        },
+        }
       },
       "restore": {
         "lineage": "$MYSQL_RESTORE_LINEAGE",
