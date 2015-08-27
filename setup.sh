@@ -8,7 +8,7 @@ cat <<EOF >>/tmp/appeng-inputs.json
     "rs-mysql": {
       "server_root_password": "$MYSQL_SERVER_ROOT_PASSWORD",
       "bind_network_interface": "$MYSQL_BIND_INTERFACE",
-      "server_usage": $MYSQL_SERVER_USAGE",
+      "server_usage": "$MYSQL_SERVER_USAGE",
       "application_username": "$MYSQL_APPLICATION_USERNAME",
       "application_password": $MYSQL_APPLICATION_PASSWORD",
       "application_user_privileges": "$MYSQL_APPLICATION_USER_PRIVILEGES",
@@ -18,7 +18,7 @@ cat <<EOF >>/tmp/appeng-inputs.json
         "count": "$MYSQL_DEVICE_COUNT",
         "mount_point": "$MYSQL_DEVICE_MPOINT",
         "nickname": "$MYSQL_DEVICE_NICKNAME",
-        "volume_size": $MYSQL_DEVICE_VOLUME_SIZE",
+        "volume_size": "$MYSQL_DEVICE_VOLUME_SIZE",
         "iops": "$MYSQL_DEVICE_IOPS",
         "volume_type": "$MYSQL_VOLUME_TYPE",
         "filesystem": "$MYSQL_DEVICE_FILESYSTEM",
