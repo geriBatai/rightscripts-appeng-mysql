@@ -2,7 +2,7 @@
 
 echo 'cookbook_path "/var/spool/rightlink/cookbooks/"' > /tmp/appeng-config.rb
 
-cat <<EOF >>/tmp/appeng-inputs.json
+cat <<EOF >/tmp/appeng-inputs.json
 {
   "mysql": {
     "server_root_password": "$MYSQL_SERVER_ROOT_PASSWORD",
