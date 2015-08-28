@@ -5,6 +5,11 @@ echo 'cookbook_path "/var/spool/rightlink/cookbooks/"' > /tmp/appeng-config.rb
 cat <<EOF >>/tmp/appeng-inputs.json
 {
   "normal": {
+		"mysql": {
+      "server_root_password": "$MYSQL_SERVER_ROOT_PASSWORD",
+			"server_debian_password": "$MYSQL_SERVER_ROOT_PASSWORD",
+			"server_repl_password": "$MYSQL_SERVER_ROOT_PASSWORD"
+		},
     "rs-mysql": {
       "server_root_password": "$MYSQL_SERVER_ROOT_PASSWORD",
       "bind_network_interface": "$MYSQL_BIND_INTERFACE",
