@@ -7,7 +7,7 @@ echo 'cookbook_path "/var/spool/rightlink/cookbooks/"' > /tmp/appeng-config.rb
 for d in $(ls -d /var/spool/rightlink/cookbooks/*/) ; do
 	dirname=$(basename $d)
 	if [ -f "${d}/metadata.rb" ]; then
-		cookbook_name=$(awk /^name/{print \$2} ${d}/metadata.rb | sed -e "s/'//g")
+		cookbook_name=$(awk '/^name/{print $2}'' ${d}/metadata.rb | tr -d "'" | tr -d '"')
 		if [ "${cookbook_name}" != "${dirname}" ]; then
 			mv ${d} $(dirname ${d})/${cookbook_name}
 		fi
