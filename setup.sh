@@ -14,7 +14,7 @@ for d in $(ls -d /var/spool/rightlink/cookbooks/*/) ; do
 	fi
 done
 
-ruby <<EOF > /tmp/appeng-inputs.json
+/opt/chef/bin/ruby <<EOF > /tmp/appeng-inputs.json
 require 'rubygems'
 require 'json'
 
