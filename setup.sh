@@ -2,6 +2,19 @@
 
 echo 'cookbook_path "/var/spool/rightlink/cookbooks/"' > /tmp/appeng-config.rb
 
+# Move cookbooks to directories named after them. Fixes problem with
+# chef reporting templates missing.
+for d in $(ls -d /var/spool/rightlink/cookbooks/*/) ; do
+	dirname=$(basename $d)
+	if [ -f "${d}/metadata.rb" ]; then
+		cookbook_name=$(awk /^name/{print \$2} ${d}/metadata.rb | sed -e "s/'//g'")
+		if [ "${cookbook_name}" != "${dirname}" ]; then
+			mv ${d} $(dirname ${d})/${cookbook_name}
+		fi
+	fi
+done
+
+
 cat <<EOF >/tmp/appeng-inputs.json
 {
   "mysql": {
