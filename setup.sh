@@ -7,71 +7,77 @@ echo 'cookbook_path "/var/spool/rightlink/cookbooks/"' > /tmp/appeng-config.rb
 for d in $(ls -d /var/spool/rightlink/cookbooks/*/) ; do
 	dirname=$(basename $d)
 	if [ -f "${d}/metadata.rb" ]; then
-		cookbook_name=$(awk '/^name/{print $2}'' ${d}/metadata.rb | tr -d "'" | tr -d '"')
+		cookbook_name=$(awk '/^name/{print $2}' ${d}/metadata.rb | tr -d "'" | tr -d '"')
 		if [ "${cookbook_name}" != "${dirname}" ]; then
 			mv ${d} $(dirname ${d})/${cookbook_name}
 		fi
 	fi
 done
 
+ruby <<EOF > /tmp/appeng-inputs.json
+require 'rubygems'
+require 'json'
 
-cat <<EOF >/tmp/appeng-inputs.json
-{
-  "mysql": {
-    "server_root_password": "$MYSQL_SERVER_ROOT_PASSWORD",
-    "server_debian_password": "$MYSQL_SERVER_ROOT_PASSWORD",
-    "server_repl_password": "$MYSQL_REPL_PASSWORD"
-  },
-  "rs-mysql": {
-    "server_root_password": "$MYSQL_SERVER_ROOT_PASSWORD",
-    "bind_network_interface": "$MYSQL_BIND_INTERFACE",
-    "server_usage": "$MYSQL_SERVER_USAGE",
-    "application_username": "$MYSQL_APPLICATION_USERNAME",
-    "application_password": "$MYSQL_APPLICATION_PASSWORD",
-    "application_user_privileges": "$MYSQL_APPLICATION_USER_PRIVILEGES",
-    "application_database_name": "$MYSQL_DATABASE_NAME",
-    "server_repl_password": "$MYSQL_REPL_PASSWORD",
-    "device": {
-      "count": "$MYSQL_DEVICE_COUNT",
-      "mount_point": "$MYSQL_DEVICE_MPOINT",
-      "nickname": "$MYSQL_DEVICE_NICKNAME",
-      "volume_size": "$MYSQL_DEVICE_VOLUME_SIZE",
-      "iops": "$MYSQL_DEVICE_IOPS",
-      "volume_type": "$MYSQL_VOLUME_TYPE",
-      "filesystem": "$MYSQL_DEVICE_FILESYSTEM",
-      "detach_timeout": "$MYSQL_DEVICE_DETACH_TIMEOUT",
-      "destroy_on_decommision": "$MYSQL_DEVICE_DESTROY_ON_DECOMMISION"
-    },
-    "backup": {
-      "lineage": "$MYSQL_BACKUP_LINEAGE",
-      "keep": {
-        "dailies": "$MYSQL_BACKUP_KEEP_DAILIES",
-        "weeklies": "$MYSQL_BACKUP_KEEP_WEEKLIES",
-        "monthlies": "$MYSQL_BACKUP_KEEP_MONTHLIES",
-        "yearlies": "$MYSQL_BACKUP_KEEP_YEARLIES",
-        "keep_last": "$MYSQL_BACKUP_KEEP_LAST"
-      }
-    },
-    "restore": {
-      "lineage": "$MYSQL_RESTORE_LINEAGE",
-      "timestamp": "$MYSQL_RESTORE_TIMESTAMP"
-    },
-    "shedule": {
-      "enable": "$MYSQL_BACKUP_SCHEDULE_ENABLE",
-      "hour": "$MYSQL_BACKUP_SCHEDULE_HOUR",
-      "minute": "$MYSQL_BACKUP_SCHEDULE_MINUTE"
-    }
-  },
-  "dns": {
-    "master_fqdn": "$MYSQL_DNS_MASTER_FQDN",
-    "user_key": "$MYSQL_DNS_USER_KEY",
-    "secret_key": "$MYSQL_DNS_SECRET_KEY"
-  },
-  "import": {
-    "private_key": "$MYSQL_IMPORT_SECRET_KEY",
-    "repository": "$MYSQL_IMPORT_REPOSITORY",
-    "revision": "$MYSQL_IMPORT_REPOSITORY_REVISION",
-    "dump_file": "$MYSQL_IMPORT_DUMP_FILE"
-  }
-}
+def assign(k,v)
+  k = v if v
+end
+
+attr = {}
+
+attr['mysql'] = {}
+assign attr['mysql']['server_root_password'], ENV['MYSQL_SERVER_ROOT_PASSWORD']
+assign attr['mysql']['server_debian_password'], ENV['MYSQL_SERVER_ROOT_PASSWORD']
+assign attr['mysql']['server_repl_password'], ENV['MYSQL_SERVER_REPL_PASSWORD']
+
+attr['rs-mysql'] = {}
+assign attr['rs-mysql']['server_root_password'],ENV['MYSQL_SERVER_ROOT_PASSWORD']
+assign attr['rs-mysql']['bind_network_interface'], ENV['MYSQL_BIND_INTERFACE']
+assign attr['rs-mysql']['server_usage'], ENV['MYSQL_SERVER_USAGE']
+assign attr['rs-mysql']['application_username'], ENV['MYSQL_APPLICATION_USERNAME']
+assign attr['rs-mysql']['application_password'], ENV['MYSQL_APPLICATION_PASSWORD']
+assign attr['rs-mysql']['application_user_privileges'], ENV['MYSQL_APPLICATION_USER_PRIVILEGES']
+assign attr['rs-mysql']['application_database_name'], ENV['MYSQL_DATABASE_NAME']
+assign attr['rs-mysql']['server_repl_password'], ENV['MYSQL_SERVER_REPL_PASSWORD']
+
+attr['rs-mysql']['device'] = {}
+assign attr['rs-mysql']['device']['count'], ENV['MYSQL_DEVICE_COUNT']
+assign attr['rs-mysql']['device']['mount_point'], ENV['MYSQL_DEVICE_MPOINT']
+assign attr['rs-mysql']['device']['nickname'], ENV['MYSQL_DEVICE_NICKNAME']
+assign attr['rs-mysql']['device']['volume_size'], ENV['MYSQL_DEVICE_VOLUME_SIZE']
+assign attr['rs-mysql']['device']['iops'], ENV['MYSQL_DEVICE_IOPS']
+assign attr['rs-mysql']['device']['volume_type'], ENV['MYSQL_DEVICE_VOLUME_TYPE']
+assign attr['rs-mysql']['device']['filesystem'], ENV['MYSQL_DEVICE_FILESYSTEM']
+assign attr['rs-mysql']['device']['detach_timeout'], ENV['MYSQL_DEVICE_DETACH_TIMEOUT']
+assign attr['rs-mysql']['device']['destroy_on_decommision'], ENV['MYSQL_DEVICE_DESTROY_ON_DECOMMISION']
+
+attr['rs-mysql']['backup'] = {}
+assign attr['rs-mysql']['backup']['lineage'], ENV['MYSQL_BACKUP_LINEAGE']
+
+attr['rs-mysql']['backup']['keep'] = {}
+assign attr['rs-mysql']['backup']['keep']['dailies'], ENV['MYSQL_BACKUP_KEEP_DAILIES']
+assign attr['rs-mysql']['backup']['keep']['weeklies'], ENV['MYSQL_BACKUP_KEEP_WEEKLIES']
+assign attr['rs-mysql']['backup']['keep']['monthlies'], ENV['MYSQL_BACKUP_KEEP_MONTHLIES']
+assign attr['rs-mysql']['backup']['keep']['yearlies'], ENV['MYSQL_BACKUP_KEEP_YEARLIES']
+assign attr['rs-mysql']['backup']['keep']['last'], ENV['MYSQL_BACKUP_KEEP_LAST']
+
+attr['rs-mysql']['backup']['schedule'] = {}
+assign attr['rs-mysql']['backup']['schedule']['enable'], ENV['MYSQL_BACKUP_SCHEDULE_ENABLE']
+assign attr['rs-mysql']['backup']['schedule']['hour'], ENV['MYSQL_BACKUP_SCHEDULE_HOUR']
+assign attr['rs-mysql']['backup']['schedule']['minute'], ENV['MYSQL_BACKUP_SCHEDULE_MINUTE']
+
+attr['rs-mysql']['restore'] = {}
+assign attr['rs-mysql']['restore']['lineage'], ENV['MYSQL_RESTORE_LINEAGE']
+assign attr['rs-mysql']['restore']['timestamp'], ENV['MYSQL_RESTORE_TIMESTAMP']
+
+attr['rs-mysql']['dns'] = {}
+assign attr['rs-mysql']['dns']['master_fqdn'], ENV['MYSQL_DNS_MASTER_FQDN']
+assign attr['rs-mysql']['dns']['user_key'], ENV['MYSQL_DNS_USER_KEY']
+assign attr['rs-mysql']['dns']['secret_key'], ENV['MYSQL_DNS_SECRET_KEY']
+
+attr['rs-mysql']['import'] = {}
+assign attr['rs-mysql']['import']['private_key'], ENV['MYSQL_IMPORT_PRIVATE_KEY']
+assign attr['rs-mysql']['import']['repository'], ENV['MYSQL_IMPORT_REPOSITORY']
+assign attr['rs-mysql']['import']['revision'], ENV['MYSQL_IMPORT_REPOSITORY_REVISION']
+assign attr['rs-mysql']['import']['dump_file'], ENV['MYSQL_IMPORT_DUMP_FILE']
+puts attr.to_json
 EOF
