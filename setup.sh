@@ -17,11 +17,6 @@ done
 /opt/chef/embedded/bin/ruby <<EOF > /tmp/appeng-inputs.json
 require 'rubygems'
 require 'json'
-
-def assign(k,v)
-  k = v if v
-end
-
 attr = {}
 
 attr['mysql'] = {}
