@@ -30,7 +30,7 @@ attr['rs-mysql']['bind_network_interface'] = ENV['MYSQL_BIND_INTERFACE'] if  ENV
 attr['rs-mysql']['server_usage'] = ENV['MYSQL_SERVER_USAGE'] if  ENV['MYSQL_SERVER_USAGE']
 attr['rs-mysql']['application_username'] = ENV['MYSQL_APPLICATION_USERNAME'] if  ENV['MYSQL_APPLICATION_USERNAME']
 attr['rs-mysql']['application_password'] = ENV['MYSQL_APPLICATION_PASSWORD'] if  ENV['MYSQL_APPLICATION_PASSWORD']
-attr['rs-mysql']['application_user_privileges'] = ENV['MYSQL_APPLICATION_USER_PRIVILEGES'] if  ENV['MYSQL_APPLICATION_USER_PRIVILEGES']
+attr['rs-mysql']['application_user_privileges'] = ENV['MYSQL_APPLICATION_USER_PRIVILEGES'].split(',') if  ENV['MYSQL_APPLICATION_USER_PRIVILEGES']
 attr['rs-mysql']['application_database_name'] = ENV['MYSQL_DATABASE_NAME'] if  ENV['MYSQL_DATABASE_NAME']
 attr['rs-mysql']['server_repl_password'] = ENV['MYSQL_SERVER_REPL_PASSWORD'] if  ENV['MYSQL_SERVER_REPL_PASSWORD']
 
