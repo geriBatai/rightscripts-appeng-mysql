@@ -2,7 +2,7 @@ name "appeng-mysql"
 
 maintainer "AppEng EMEA"
 description "AppEng wrappers for running RightScale MySQL recipes with RightLink 10"
-version '0.0.15'
+version '0.0.16'
 
 
 recipe "appeng-mysql::setup", "Setup inputs for usage"
